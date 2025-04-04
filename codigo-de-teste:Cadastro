@@ -1,0 +1,93 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, Alert, FlatList, StyleSheet } from 'react-native';
+
+export default function App() {
+  // Estado para armazenar os dados do paciente
+  const [nome, setNome] = useState('');
+  const [idade, setIdade] = useState('');
+  const [telefone, setTelefone] = useState('');
+
+  // Estado para armazenar a lista de pacientes
+  const [pacientes, setPacientes] = useState([]);
+
+  // Função para cadastrar paciente
+  const cadastrarPaciente = () => {
+    if (nome && idade && telefone) {
+      const novoPaciente = { id: Math.random().toString(), nome, idade, telefone };
+      setPacientes([...pacientes, novoPaciente]); // Adiciona o paciente à lista
+      setNome('');
+      setIdade('');
+      setTelefone('');
+    } else {
+      Alert.alert("Erro", "Por favor, preencha todos os campos.");
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>Cadastro de Paciente</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
+      />
+      
+      <TextInput
+        style={styles.input}
+        placeholder="Idade"
+        value={idade}
+        keyboardType="numeric"
+        onChangeText={setIdade}
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Telefone"
+        value={telefone}
+        onChangeText={setTelefone}
+      />
+
+      <Button title="Cadastrar" onPress={cadastrarPaciente} />
+
+      <FlatList
+        data={pacientes}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.item}>
+            <Text>{`Nome: ${item.nome}, Idade: ${item.idade}, Telefone: ${item.telefone}`}</Text>
+          </View>
+        )}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  header: {
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  item: {
+    padding: 10,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderRadius: 5,
+    width: '100%',
+    backgroundColor: '#f0f0f0',
+  },
+});
